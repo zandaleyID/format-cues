@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Same Response, Three Ways</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;700&family=Figtree:wght@400;500;600&display=swap">
+<style>
+:root {
+  --bg: #eaf1ff; --surface: #f6f9ff; --fg: #0b214f; --muted: #3d4d78; --line: #c7d2ec;
+  --navy: #0b214f; --purple: #5b479d; --focus: #0b214f;
+  --g-bg: #cdeacb; --g-fg: #1b6b2a; --a-bg: #f9dca0; --a-fg: #7a4f00; --r-bg: #f9d3d3; --r-fg: #a32525;
+  --hero1: #0b214f; --hero2: #5b479d;
+  --display: "Bricolage Grotesque", "Trebuchet MS", system-ui, sans-serif;
+  --body: "Figtree", system-ui, -apple-system, "Segoe UI", sans-serif;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0e1530; --surface: #162043; --fg: #e8ecff; --muted: #b3bddf; --line: #2b3763;
+    --navy: #e8ecff; --purple: #c1b3ff; --focus: #e8ecff;
+    --g-bg: #1d4a27; --g-fg: #b9f0c2; --a-bg: #4d3a0c; --a-fg: #ffdc8a; --r-bg: #55212a; --r-fg: #ffb8bf;
+    --hero1: #1b2f6b; --hero2: #4a3a8a; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0e1530; --surface: #162043; --fg: #e8ecff; --muted: #b3bddf; --line: #2b3763;
+  --navy: #e8ecff; --purple: #c1b3ff; --focus: #e8ecff;
+  --g-bg: #1d4a27; --g-fg: #b9f0c2; --a-bg: #4d3a0c; --a-fg: #ffdc8a; --r-bg: #55212a; --r-fg: #ffb8bf;
+  --hero1: #1b2f6b; --hero2: #4a3a8a; color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html { color-scheme: light; }
+body { margin: 0; background: var(--bg); color: var(--fg); font-family: var(--body); font-size: 16px; line-height: 1.5;
+  padding: 24px max(16px, env(safe-area-inset-right, 0px)) 40px max(16px, env(safe-area-inset-left, 0px)); }
+main { max-width: 860px; margin: 0 auto; display: flex; flex-direction: column; gap: 20px; }
+header { background: linear-gradient(120deg, var(--hero1), var(--hero2)); color: #fff; border-radius: 18px; padding: 24px; }
+h1 { font-family: var(--display); font-size: clamp(1.7rem, 5vw, 2.4rem); line-height: 1.1; margin: 0; text-wrap: balance; }
+.lede { margin: 8px 0 0; color: #e6e9fb; max-width: 60ch; }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 16px 18px; }
+.label { font-size: .78rem; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); font-weight: 600; margin: 0 0 4px; }
+.student { font-size: 1.1rem; margin: 0; }
+.seg { display: flex; gap: 8px; flex-wrap: wrap; }
+.seg button, .tabs button { font: inherit; cursor: pointer; border-radius: 10px; border: 2px solid var(--line); background: var(--surface); color: var(--fg); padding: 10px 14px; }
+.seg button[aria-pressed="true"] { border-color: var(--purple); background: var(--purple); color: #fff; font-weight: 600; }
+.tabs { display: flex; gap: 8px; flex-wrap: wrap; }
+.tabs button[aria-selected="true"] { border-color: var(--navy); border-bottom-width: 5px; font-weight: 600; }
+button:focus-visible, audio:focus-visible, video:focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; }
+.panel { display: flex; flex-direction: column; gap: 14px; }
+.response { font-size: 1.15rem; margin: 0; }
+.response em { color: var(--purple); font-style: italic; }
+.audio-wrap { display: flex; flex-direction: column; gap: 8px; }
+audio, video { width: 100%; }
+video { border-radius: 12px; background: #000; max-height: 70vh; }
+.note { margin: 0; color: var(--muted); font-size: .95rem; }
+.chips { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px; }
+.chip { border-radius: 12px; padding: 10px 12px; min-width: 0; }
+.chip b { display: block; font-size: .85rem; }
+.chip span { display: block; font-size: .98rem; }
+.chip.g { background: var(--g-bg); color: var(--g-fg); }
+.chip.a { background: var(--a-bg); color: var(--a-fg); }
+.chip.r { background: var(--r-bg); color: var(--r-fg); }
+.legend { display: flex; gap: 14px; flex-wrap: wrap; font-size: .9rem; color: var(--muted); }
+.legend i { display: inline-block; width: 12px; height: 12px; border-radius: 3px; margin-right: 6px; vertical-align: -1px; }
+.legend .g { background: var(--g-bg); } .legend .a { background: var(--a-bg); } .legend .r { background: var(--r-bg); }
+[hidden] { display: none !important; }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <h1>Same response, three ways</h1>
+    <p class="lede">One student question, two ways of answering it. Choose a response, then try each way of accessing it and notice which cues reach you.</p>
+  </header>
+
+  <section class="card" aria-label="The student's question">
+    <p class="label">Mock student</p>
+    <p class="student">“I wrote that the study proves social media causes anxiety. Is that right?”</p>
+  </section>
+
+  <section aria-label="Choose a response">
+    <p class="label">Choose a response</p>
+    <div class="seg" id="seg"></div>
+  </section>
+
+  <section aria-label="Choose a format">
+    <p class="label">Choose how you access it</p>
+    <div class="tabs" role="tablist" id="tabs" aria-label="Formats"></div>
+  </section>
+
+  <section class="card panel" id="panel" role="tabpanel" aria-live="polite"></section>
+
+  <div class="legend" aria-hidden="true"><span><i class="g"></i>Carried</span><span><i class="a"></i>Partly carried</span><span><i class="r"></i>Not carried</span></div>
+</main>
+
+<script>
+(function () {
+  var responses = [
+    { id: "check", label: "Answer-checking response",
+      plain: "No, that's not right. One study can't prove causation. Change “proves” to “suggests” and move on.",
+      staged: "<em>[Flat and brisk, almost no pause.]</em> No, that's not right. <em>[Brisk.]</em> One study can't prove causation. Change “proves” to “suggests” and move on.",
+      audio: "audio/answer-checking", video: "video/answer-checking" },
+    { id: "socratic", label: "Socratic response",
+      plain: "Let's look at the word “proves”. What would you need to see in the study to say that social media causes anxiety, rather than just being linked to it?",
+      staged: "<em>[Warm and unhurried.]</em> Let's look at the word “proves”. <em>[Pauses.]</em> What would you need to see in the study to say that social media causes anxiety, rather than just being linked to it? <em>[Slowly, leaving a silence for the student to think.]</em>",
+      audio: "audio/socratic", video: "video/socratic" }
+  ];
+  var formats = [
+    { id: "stage", label: "Read with stage directions",
+      info: "Some cues are described in brackets. They tell you about the tone and pacing but do not carry them.",
+      chips: [["Tone of voice","Described, e.g. says quietly","a"],["Pacing","Described, e.g. says slowly","a"],["Body language","Not carried unless added","r"],["Wording of the response","Carried in full","g"]] },
+    { id: "listen", label: "Listen",
+      info: "You hear the tone and pacing directly. Body language still doesn't reach you in audio alone; that needs video.",
+      chips: [["Tone of voice","Heard directly","g"],["Pacing","Heard directly","g"],["Body language","Not carried (audio only)","r"],["Wording of the response","Heard","g"]] },
+    { id: "watch", label: "Watch",
+      info: "You hear the tone and pacing and see the body language. Captions are available on the video.",
+      chips: [["Tone of voice","Heard directly","g"],["Pacing","Heard directly","g"],["Body language","Seen directly","g"],["Wording of the response","Heard","g"]] }
+  ];
+  var curR = 0, curF = 0;
+  var seg = document.getElementById("seg"), tabs = document.getElementById("tabs"), panel = document.getElementById("panel");
+  var segBtns = [], tabBtns = [];
+
+  responses.forEach(function (r, i) {
+    var b = document.createElement("button"); b.type = "button"; b.textContent = r.label;
+    b.addEventListener("click", function () { curR = i; render(); });
+    seg.appendChild(b); segBtns.push(b);
+  });
+  formats.forEach(function (f, i) {
+    var b = document.createElement("button"); b.type = "button"; b.setAttribute("role", "tab"); b.id = "tab-" + f.id;
+    b.setAttribute("aria-controls", "panel"); b.textContent = f.label;
+    b.addEventListener("click", function () { curF = i; render(); });
+    b.addEventListener("keydown", function (e) {
+      var n = formats.length, k = e.key;
+      if (k === "ArrowRight" || k === "ArrowLeft") {
+        curF = (curF + (k === "ArrowRight" ? 1 : n - 1)) % n; render(); tabBtns[curF].focus(); e.preventDefault();
+      }
+    });
+    tabs.appendChild(b); tabBtns.push(b);
+  });
+
+  function render() {
+    var r = responses[curR], f = formats[curF];
+    segBtns.forEach(function (b, i) { b.setAttribute("aria-pressed", i === curR ? "true" : "false"); });
+    tabBtns.forEach(function (b, i) { b.setAttribute("aria-selected", i === curF ? "true" : "false"); b.tabIndex = i === curF ? 0 : -1; });
+    panel.setAttribute("aria-labelledby", "tab-" + f.id);
+    var html = "";
+    if (f.id === "stage") html += '<p class="response">' + r.staged + '</p>';
+    if (f.id === "listen") {
+      html += '<div class="audio-wrap"><audio controls preload="none" id="aud" aria-label="' + r.label + ' audio">' +
+        '<source src="' + r.audio + '.mp3" type="audio/mpeg"><source src="' + r.audio + '.m4a" type="audio/mp4"></audio>' +
+        '<p class="note" id="audnote" hidden>The audio file for this response has not been added yet.</p></div>';
+    }
+    if (f.id === "watch") {
+      html += '<div class="audio-wrap"><video controls preload="none" id="vid" playsinline aria-label="' + r.label + ' video">' +
+        '<source src="' + r.video + '.mp4" type="video/mp4">' +
+        '<track kind="captions" src="' + r.video + '.vtt" srclang="en" label="English" default></video>' +
+        '<p class="note" id="vidnote" hidden>The video file for this response has not been added yet.</p></div>';
+    }
+    html += '<p class="note"><strong>What you get:</strong> ' + f.info + '</p><div class="chips">';
+    f.chips.forEach(function (c) { html += '<div class="chip ' + c[2] + '"><b>' + c[0] + '</b><span>' + c[1] + '</span></div>'; });
+    html += '</div>';
+    panel.innerHTML = html;
+    var vid = document.getElementById("vid");
+    if (vid) {
+      var vs = vid.querySelector("source");
+      vs.addEventListener("error", function () { document.getElementById("vidnote").hidden = false; });
+    }
+    var aud = document.getElementById("aud");
+    if (aud) {
+      var srcs = aud.querySelectorAll("source"), failed = 0;
+      for (var i = 0; i < srcs.length; i++) srcs[i].addEventListener("error", function () {
+        failed++; if (failed === srcs.length) document.getElementById("audnote").hidden = false;
+      });
+    }
+  }
+  render();
+})();
+</script>
+</body>
+</html>
